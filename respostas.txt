@@ -1,0 +1,21 @@
+Questão 6.
+R= 
+A falha está acontecendo porque a configuração WALLET_X_TOKEN_MAX_AGE não está definida arquivo core.settings
+Ao tentar usar uma variável que não existe nesse ambiente, gera o AttributeError. 
+AttributeError("module 'core.settings' has no attribute ‘WALLET_X_TOKEN_MAX_AGE'")
+
+
+Questão 7.
+R= 
+I) Necessário ser adotado o usuo de ORM como SQL Alchemy, pois há um risco ao usar SQL puro no código, além de escalar de uma forma ruim, dificultando o entendimento do códio, há o risco de um SQL injector.
+II) Há dados sensíveis expostos, como senha em hardcoded. Será interessante adotar arquivos de configuração com um .env
+III)Vários imports em uma mesma linha, será necessário separa-los para melhor entedimento do código, além de importaçõeos que nem sequer estão sendo utilizadas no funcinamento do bot.
+IV) Nomes de variáveis genéricas, sem clareza do seu funcionamento, dificultando o entendimento. Será adotado uma nomeclatura padrão, buscando identificar o funcionamento da variável no contexto do código.
+V) Não há nenhum tratamento de erro. Implementar um try except com mensagem de feedback.
+VI) Repetição da operação worksheet.write. Implementar um método para realizar essas repeticões.
+
+
+Questão 8.
+R= 
+Cada fornecedor possui uma API diferente (nomes de métodos, formatos de dados, autenticação).
+O Adapter permite converter a interface de cada serviço externo para uma interface padrão definida pela aplicação.
