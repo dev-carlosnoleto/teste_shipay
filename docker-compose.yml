@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: user_api_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres123
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app_network
+    restart: unless-stopped
+
+  # Serviço apenas para build da imagem Docker
+  # A aplicação não será iniciada automaticamente
+  app:
+    build: .
+    image: user-api:latest
+    container_name: user_api_app
+    profiles:
+      - tools  # Apenas inicia quando explicitamente solicitado
+    environment:
+      DB_USER: postgres
+      DB_PASSWORD: postgres123
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: postgres
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - .:/app
+    networks:
+      - app_network
+    command: sleep infinity  # Mantém container rodando sem iniciar a app
+
+volumes:
+  postgres_data:
+
+networks:
+  app_network:
+    driver: bridge
+
