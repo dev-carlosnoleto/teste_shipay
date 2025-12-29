@@ -1,247 +1,91 @@
 # Shipay Backend Challenge - UserAPI
 
-## Sobre
+API REST para gerenciamento de usuários desenvolvida com FastAPI, PostgreSQL e SQLAlchemy.
 
-A **Shipay Backend Challenge** é uma API RESTful desenvolvida para gerenciar operações de CRUD para usuários, roles e claims. Esta aplicação demonstra o uso de FastAPI e tecnologias associadas para criar e gerenciar recursos em um banco de dados relacional PostgreSQL.
+**Repositório:** [https://github.com/dev-carlosnoleto/teste_shipay](https://github.com/dev-carlosnoleto/teste_shipay)
 
-## 📋 Tecnologias
+> **📝 Nota**: Esta aplicação requer inicialização **manual** com Uvicorn. Não há automação de inicialização.
 
-- **Python 3.11**
-- **FastAPI**
-- **SQLAlchemy**
-- **Alembic**
-- **PostgreSQL**
-- **Docker** & **Docker Compose**
+## 🎯 Sobre o Projeto
 
-## 🚀 Instalação Normal
+API REST para consulta e criação de usuários e permissões, gereniciando recursos em um banco de dados relacional.
+### Funcionalidades
 
-**Clone o repositório**:
+- ✅ Criação de usuários com geração automática de senha
+- ✅ Consulta de usuários por ID
+- ✅ Consulta de roles por ID
+- ✅ Migrations com Alembic (execução manual)
+- ✅ Validação de dados com Pydantic
+- ✅ Banco de dados com Identity columns (PostgreSQL)
 
-```bash
-git clone https://github.com/dev-carlosnoleto/teste_shipay.git
-cd teste_shipay
-```
+## 🛠 Tecnologias
 
-**Criar ambiente virtual**:
+- **FastAPI** 0.127.1 - Framework web moderno e rápido
+- **PostgreSQL** 15 - Banco de dados relacional
+- **SQLAlchemy** 2.0.45 - ORM Python
+- **Alembic** 1.13.2 - Gerenciamento de migrations
+- **Pydantic** 2.12.5 - Validação de dados
+- **Uvicorn** 0.40.0 - Servidor ASGI
+- **Docker** & **Docker Compose** - Containerização
+- **Nginx** - Proxy reverso 
 
-```bash
-# Windows
-python -m venv venv
-venv\Scripts\activate
+## 🔧 Requisitos
 
-# Linux/Mac
-python3 -m venv venv
-source venv/bin/activate
-```
+### Para Docker Compose (Recomendado)
 
-**Instalar as dependências do projeto**:
+- **Docker** 20.10+
+- **Docker Compose** 2.0+
+- [Instalar Docker](https://docs.docker.com/get-docker/)
 
-```bash
-pip install -r requirements.txt
-```
+### Para Instalação Local
 
-**Configurar o arquivo `.env`**:
+- **Python** 3.8+ (recomendado 3.11)
+- **PostgreSQL** 12+
+- **pip** (gerenciador de pacotes Python)
 
-Crie um arquivo `.env` na raiz do projeto com as configurações do banco de dados:
+## 🚀 Instalação e Execução Local
 
-```env
-DB_USER=postgres
-DB_PASSWORD=postgres123
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=postgres
-```
+### Método 1: Docker Compose (Apenas Banco de Dados)
 
-> 💡 Use o arquivo `.env.example` como base (se existir)
+O Docker Compose apenas inicia o banco de dados PostgreSQL. A instalação de dependências, execução de migrations e inicialização da API são **manuais**.
 
-**Iniciar o banco de dados PostgreSQL**:
-
-Você pode usar Docker Compose para iniciar apenas o banco de dados:
-
-```bash
-docker-compose up -d db
-```
-
-Ou instalar PostgreSQL localmente e criar o banco de dados manualmente.
-
-**Depois de configurado seu banco de dados, execute as migrations**:
-
-```bash
-# Executar migrations
-alembic upgrade head
-
-# Verificar status
-alembic current
-```
-
-**Rodar o projeto**:
-
-```bash
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
-```
-
-A API estará disponível em `http://localhost:8000`
-
-## 🐳 Instalação via Docker
-
-**Clone o repositório**:
+#### 1. Clonar o Repositório
 
 ```bash
 git clone https://github.com/dev-carlosnoleto/teste_shipay.git
 cd teste_shipay
 ```
 
-**Iniciar apenas o banco de dados PostgreSQL**:
+#### 2. Iniciar Banco de Dados
 
 ```bash
+# Iniciar apenas o banco de dados PostgreSQL
 docker-compose up -d db
+
+# Verificar se está rodando
+docker-compose ps
+
+# Parar o banco
+docker-compose down
 ```
 
-**Construir a imagem Docker da aplicação**:
-
-```bash
-docker-compose build app
-```
-
-**Executar migrations**:
-
-```bash
-# Linux/Mac
-./run-migrations.sh
-
-# Windows
-run-migrations.bat
-
-# Ou manualmente
-docker-compose run --rm app alembic upgrade head
-```
-
-**Instalar dependências e iniciar aplicação**:
+#### 3. Criar Ambiente Virtual e Instalar Dependências
 
 ```bash
 # Criar ambiente virtual
 python -m venv venv
-source venv/bin/activate  # Linux/Mac
-# ou
-venv\Scripts\activate     # Windows
+
+# Ativar ambiente virtual
+# Windows:
+venv\Scripts\activate
+# Linux/Mac:
+source venv/bin/activate
 
 # Instalar dependências
 pip install -r requirements.txt
-
-# Iniciar aplicação
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-> ⚠️ **Nota**: O Docker Compose apenas inicia o banco de dados. A instalação de dependências e inicialização da aplicação são manuais.
-
-## 🌐 Rotas da API
-
-A documentação interativa da API (Swagger) está disponível em:
-
-- **Swagger UI**: http://localhost:8000/docs
-- **ReDoc**: http://localhost:8000/redoc
-
-### Endpoints Disponíveis
-
-#### Usuários
-
-- `POST /users/create` - Criar um novo usuário
-- `GET /users/{user_id}` - Buscar usuário por ID
-
-#### Roles
-
-- `GET /role/{role_id}` - Buscar role por ID
-
-### Exemplo de Uso
-
-**Criar usuário**:
-
-```bash
-curl -X POST "http://localhost:8000/users/create" \
-     -H "Content-Type: application/json" \
-     -d '{
-       "name": "João Silva",
-       "email": "joao@example.com",
-       "role_id": 1
-     }'
-```
-
-**Buscar usuário**:
-
-```bash
-curl "http://localhost:8000/users/1"
-```
-
-**Buscar role**:
-
-```bash
-curl "http://localhost:8000/role/1"
-```
-
-## 📁 Estrutura do Projeto
-
-```
-teste_shipay/
-├── app/
-│   ├── controllers/          # Endpoints da API
-│   ├── models/               # Modelos do banco de dados
-│   ├── schema/               # Schemas Pydantic
-│   ├── services/             # Lógica de negócio
-│   ├── config/               # Configurações
-│   └── main.py              # Ponto de entrada
-├── migrations/               # Migrations do Alembic
-├── docker-compose.yml        # Configuração Docker
-├── Dockerfile               # Imagem Docker
-├── requirements.txt         # Dependências
-└── README.md               # Este arquivo
-```
-
-## 🔧 Comandos Úteis
-
-### Migrations
-
-```bash
-# Executar migrations
-alembic upgrade head
-
-# Criar nova migration
-alembic revision --autogenerate -m "descrição"
-
-# Ver histórico
-alembic history
-
-# Reverter migration
-alembic downgrade -1
-```
-
-### Docker
-
-```bash
-# Iniciar banco de dados
-docker-compose up -d db
-
-# Parar banco de dados
-docker-compose down
-
-# Ver logs do banco
-docker-compose logs -f db
-
-# Executar migrations via Docker
-docker-compose run --rm app alembic upgrade head
-```
-
-## 🗄️ Banco de Dados
-
-O projeto utiliza PostgreSQL com as seguintes tabelas:
-
-- **roles** - Roles de usuários
-- **users** - Usuários do sistema
-- **claims** - Permissões/claims
-- **user_claims** - Relacionamento entre users e claims
-
-As migrations criam o banco de dados de acordo com o SQL fornecido, incluindo Identity columns (GENERATED ALWAYS AS IDENTITY).
-
-## 📝 Variáveis de Ambiente
+#### 4. Configurar Variáveis de Ambiente
 
 Crie um arquivo `.env` na raiz do projeto:
 
@@ -253,22 +97,248 @@ DB_PORT=5432
 DB_NAME=postgres
 ```
 
-Para Docker Compose, use `DB_HOST=db` (nome do serviço).
+#### 5. Executar Migrations (Manual)
 
-## 🚀 Deploy em Produção
+```bash
+# Executar migrations
+alembic upgrade head
 
-Para instruções detalhadas de deploy em AWS EC2 com Nginx, consulte a seção "Deploy em Produção - AWS EC2 com Nginx" no README completo.
+# Verificar status
+alembic current
+```
 
-## 📚 Documentação Adicional
+#### 6. Iniciar API Manualmente com Uvicorn
 
-- [FastAPI Documentation](https://fastapi.tiangolo.com/)
-- [SQLAlchemy Documentation](https://docs.sqlalchemy.org/)
-- [Alembic Documentation](https://alembic.sqlalchemy.org/)
+```bash
+# Com ambiente virtual ativado
+uvicorn app.main:app 
+```
 
-## 📞 Suporte
+A API estará disponível em:
 
-Para dúvidas ou problemas, abra uma issue no [repositório GitHub](https://github.com/dev-carlosnoleto/teste_shipay/issues).
+- **API**: http://localhost:8000
+- **Documentação Swagger**: http://localhost:8000/docs
+- **Documentação ReDoc**: http://localhost:8000/redoc
 
-## 📄 Licença
 
-Este projeto é um teste técnico desenvolvido para Shipay.
+## 🔐 Variáveis de Ambiente
+
+### Arquivo `.env` (Local)
+
+Crie um arquivo `.env` na raiz do projeto:
+
+```env
+DB_USER=postgres
+DB_PASSWORD=postgres123
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=postgres
+```
+
+### Docker Compose
+
+As variáveis de ambiente são configuradas diretamente no `docker-compose.yml`. Para produção, use um arquivo `.env` separado ou variáveis de ambiente do sistema.
+
+
+## 🌐 Deploy em Produção - AWS EC2 com Nginx
+
+### Pré-requisitos
+
+- Conta AWS ativa
+- Instância EC2 criada (Ubuntu 22.04 LTS recomendado)
+- Acesso SSH à instância EC2
+- Domínio configurado
+
+### Passo 1: Configurar Instância EC2
+
+#### 1.1. Conectar via SSH
+
+```bash
+ssh -i sua-chave.pem ubuntu@seu-ip-ec2
+```
+
+#### 1.2. Atualizar Sistema
+
+```bash
+sudo apt update && sudo apt upgrade -y
+```
+
+#### 1.3. Instalar Dependências
+
+```bash
+# Instalar Docker e Docker Compose
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+sudo usermod -aG docker ubuntu
+
+# Instalar Docker Compose
+sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+
+# Instalar Git
+sudo apt install git -y
+
+# Instalar Nginx
+sudo apt install nginx -y
+
+# Instalar PostgreSQL (se não usar Docker)
+sudo apt install postgresql postgresql-contrib -y
+```
+
+#### 1.4. Reiniciar Sessão
+
+```bash
+# Sair e reconectar para aplicar mudanças do grupo docker
+exit
+# Reconectar via SSH
+```
+
+### Passo 2: Configurar Banco de Dados PostgreSQL
+
+
+
+O `docker-compose.yml` já está configurado para usar PostgreSQL em container. Não é necessário instalação adicional.
+
+
+### Passo 3: Deploy da Aplicação
+
+#### 3.1. Clonar Repositório
+
+```bash
+cd /opt
+sudo git clone https://github.com/dev-carlosnoleto/teste_shipay.git
+sudo chown -R ubuntu:ubuntu teste_shipay
+cd teste_shipay
+```
+
+#### 3.2. Configurar Variáveis de Ambiente
+
+```bash
+# Criar arquivo .env para produção
+nano .env.production
+```
+
+Conteúdo do `.env.production`:
+
+```env
+DB_USER=postgres
+DB_PASSWORD=senha_segura_producao
+DB_HOST=db
+DB_PORT=5432
+DB_NAME=postgres
+```
+
+#### 3.3. Atualizar docker-compose.yml para Produção
+
+Crie um arquivo `docker-compose.prod.yml`:
+
+```yaml
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: user_api_db_prod
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: postgres
+    volumes:
+      - postgres_data_prod:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - app_network
+
+  app:
+    build: .
+    container_name: user_api_app_prod
+    ports:
+      - "127.0.0.1:8000:8000"  # Apenas localhost (Nginx fará proxy)
+    env_file:
+      - .env.production
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - .:/app
+    restart: unless-stopped
+    networks:
+      - app_network
+
+volumes:
+  postgres_data_prod:
+
+networks:
+  app_network:
+    driver: bridge
+```
+
+#### 3.4. Build e Iniciar Aplicação
+
+```bash
+# Build da imagem
+docker-compose -f docker-compose.prod.yml build
+
+# Iniciar serviços
+docker-compose -f docker-compose.prod.yml up -d
+
+# Verificar logs
+docker-compose -f docker-compose.prod.yml logs -f app
+```
+
+### Passo 4: Configurar Nginx
+
+#### 4.1. Criar Configuração do Nginx
+
+```bash
+sudo nano /etc/nginx/sites-available/user-api
+```
+
+Conteúdo da configuração:
+
+```nginx
+server {
+    listen 80;
+    server_name seu-dominio.com www.seu-dominio.com;  # Substitua pelo seu domínio ou IP
+
+    # Logs
+    access_log /var/log/nginx/user-api-access.log;
+    error_log /var/log/nginx/user-api-error.log;
+
+    # Tamanho máximo de upload
+    client_max_body_size 10M;
+
+    location / {
+        proxy_pass http://127.0.0.1:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        
+        # Timeouts
+        proxy_connect_timeout 60s;
+        proxy_send_timeout 60s;
+        proxy_read_timeout 60s;
+    }
+
+    # Health check endpoint (opcional)
+    location /health {
+        proxy_pass http://127.0.0.1:8000/docs;
+        access_log off;
+    }
+}
+```
+
+#### 4.2. Ativar Configuração
+
+```bash
+# Criar link simbólico
+sudo ln -s /etc/nginx/sites-available/user-api /etc/nginx/sites-enabled/
+
+# Remover configuração padrão (opcional)
+sudo rm /etc/nginx/sites-enabled/default
+
+# Reiniciar Nginx
+sudo systemctl restart nginx
+```
+
