@@ -1,7 +1,6 @@
 from fastapi import FastAPI
-from app.controllers import controller
+from app.routes import router
 
-app = FastAPI(title="User API", version="1.0")
+app = FastAPI(title="Challanger Shipay", version="1.0")
 
-# Inclui o router definido no controller
-app.include_router(controller.router)
+app.include_router(router)

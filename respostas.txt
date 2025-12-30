@@ -7,7 +7,8 @@ AttributeError("module 'core.settings' has no attribute ‘WALLET_X_TOKEN_MAX_AG
 
 Questão 7.
 R= 
-I) Necessário ser adotado o usuo de ORM como SQL Alchemy, pois há um risco ao usar SQL puro no código, além de escalar de uma forma ruim, dificultando o entendimento do códio, há o risco de um SQL injector.
+I) Necessário ser adotado o uso correto do SQL Alchemy, pois está sendo usado para executar uma query SQL puro, não utilizando ORM de forma devida (trecho: "orders = db.session.execute('SELECT * FROM
+users;')”, não tem modelagem, tendo de fazer qualquer alteração de forma manual no banco de dados, sem uma model das tabelas. Risco eminente de um SQL injector, além de ser bastabte trablhoso em grande escala, trabalhar com o SQL puro.
 II) Há dados sensíveis expostos, como senha em hardcoded. Será interessante adotar arquivos de configuração com um .env
 III)Vários imports em uma mesma linha, será necessário separa-los para melhor entedimento do código, além de importaçõeos que nem sequer estão sendo utilizadas no funcinamento do bot.
 IV) Nomes de variáveis genéricas, sem clareza do seu funcionamento, dificultando o entendimento. Será adotado uma nomeclatura padrão, buscando identificar o funcionamento da variável no contexto do código.
